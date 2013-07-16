@@ -20,8 +20,8 @@
  */
 package wmw.util.smartcard;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,19 +35,27 @@ import javax.smartcardio.TerminalFactory;
 
 import com.google.common.base.Objects;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Collections.emptyList;
 
 @SuppressWarnings("restriction")
 public final class CardReader {
 
+  public static byte[] SelectAPDU = new byte[] { (byte) 0x00, (byte) 0xA4,
+      (byte) 0x04, (byte) 0x00, (byte) 0x10, (byte) 0xD1, (byte) 0x58,
+      (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x00,
+      (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+      (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00 };
+
   private CardReader() {}
 
-  public static List<CardResponse> read(CommandAPDU command) {
-    List<CardResponse> responses = newArrayList();
+  public static Set<CardResponse> read(CommandAPDU command) {
+    Set<CardResponse> responses = newHashSet();
     for (CardTerminal terminal : getCardTerminals()) {
       try {
         Card card = terminal.connect("*");
         CardChannel channel = card.getBasicChannel();
+        channel.transmit(new CommandAPDU(SelectAPDU));
         ResponseAPDU response = channel.transmit(command);
         responses.add(new CardResponse(channel.getChannelNumber(), response
             .getData()));
@@ -61,7 +69,7 @@ public final class CardReader {
 
   private static List<CardTerminal> getCardTerminals() {
     TerminalFactory factory = TerminalFactory.getDefault();
-    List<CardTerminal> terminals = Collections.emptyList();
+    List<CardTerminal> terminals = emptyList();
     try {
       terminals = factory.terminals().list();
     } catch (CardException e) {
