@@ -20,5 +20,43 @@
  */
 package wmw.util.smartcard;
 
-public class CardResponse {
+import java.util.Arrays;
+
+import com.google.common.base.Objects;
+
+public final class CardResponse {
+
+  private final int channelNum;
+  private final byte[] data;
+
+  public CardResponse(int channelNum, byte[] data) {
+    this.channelNum = channelNum;
+    this.data = data;
+  }
+
+  public int getChannelNum() {
+    return channelNum;
+  }
+
+  public byte[] getData() {
+    return Arrays.copyOf(data, data.length);
+  }
+
+  public boolean equals(Object o) {
+    if (o instanceof CardResponse) {
+      CardResponse cr = (CardResponse) o;
+      return channelNum == cr.channelNum && Arrays.equals(data, cr.data);
+    }
+    return false;
+  }
+
+  public int hashCode() {
+    return Objects.hashCode(channelNum, Arrays.hashCode(data));
+  }
+
+  public String toString() {
+    return Objects.toStringHelper(this.getClass())
+        .add("ChannelNum", channelNum).add("Data", data).toString();
+  }
+
 }

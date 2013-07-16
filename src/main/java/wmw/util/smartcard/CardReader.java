@@ -20,27 +20,59 @@
  */
 package wmw.util.smartcard;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.smartcardio.Card;
+import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
+import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
+import com.google.common.base.Objects;
+
+import static com.google.common.collect.Lists.newArrayList;
+
+@SuppressWarnings("restriction")
 public final class CardReader {
 
-  private CardReader() {
-  }
+  private CardReader() {}
 
-  public static List<CardResponse> read(CommandAPDU command) throws CardException {
-    for (CardTerminal terminal : TerminalFactory.getDefault().terminals().list()) {
+  public static List<CardResponse> read(CommandAPDU command) {
+    List<CardResponse> responses = newArrayList();
+    for (CardTerminal terminal : getCardTerminals()) {
+      try {
+        Card card = terminal.connect("*");
+        CardChannel channel = card.getBasicChannel();
+        ResponseAPDU response = channel.transmit(command);
+        responses.add(new CardResponse(channel.getChannelNumber(), response
+            .getData()));
+      } catch (CardException e) {
+        Logger.getLogger(CardReader.class.getName()).log(Level.SEVERE, null,
+            e.getMessage());
+      }
     }
-
-    return null;
-
+    return responses;
   }
 
-  public static void main(String[] args) {
-    System.out.println("Hello World!");
+  private static List<CardTerminal> getCardTerminals() {
+    TerminalFactory factory = TerminalFactory.getDefault();
+    List<CardTerminal> terminals = Collections.emptyList();
+    try {
+      terminals = factory.terminals().list();
+    } catch (CardException e) {
+      Logger.getLogger(CardReader.class.getName()).log(Level.SEVERE, null,
+          e.getMessage());
+    }
+    return terminals;
+  }
+
+  public String toString() {
+    return Objects.toStringHelper(CardReader.class).toString();
   }
 
 }
