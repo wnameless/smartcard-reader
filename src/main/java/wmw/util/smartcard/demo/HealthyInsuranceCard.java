@@ -1,6 +1,5 @@
 package wmw.util.smartcard.demo;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -9,6 +8,8 @@ import javax.smartcardio.CommandAPDU;
 import wmw.util.smartcard.AutomatedReader;
 import wmw.util.smartcard.CardResponse;
 import wmw.util.smartcard.CardTask;
+
+import com.ibm.icu.text.CharsetDetector;
 
 @SuppressWarnings("restriction")
 public final class HealthyInsuranceCard {
@@ -27,10 +28,10 @@ public final class HealthyInsuranceCard {
         for (CardResponse cr : responses) {
           try {
             String profile =
-                new String(Arrays.copyOfRange(cr.getData(), 12, 32), "Big5")
-                    .trim();
+                new CharsetDetector().getString(
+                    Arrays.copyOfRange(cr.getData(), 12, 32), "UTF-8").trim();
             System.out.println(profile);
-          } catch (UnsupportedEncodingException e) {
+          } catch (Exception e) {
             e.printStackTrace();
           }
         }
