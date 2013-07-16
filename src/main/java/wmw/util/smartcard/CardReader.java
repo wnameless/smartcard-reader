@@ -41,11 +41,11 @@ import static java.util.Collections.emptyList;
 @SuppressWarnings("restriction")
 public final class CardReader {
 
-  public static byte[] SelectAPDU = new byte[] { (byte) 0x00, (byte) 0xA4,
-      (byte) 0x04, (byte) 0x00, (byte) 0x10, (byte) 0xD1, (byte) 0x58,
-      (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x00,
+  private static final byte[] SelectAPDU = new byte[] { (byte) 0x00,
+      (byte) 0xA4, (byte) 0x04, (byte) 0x00, (byte) 0x10, (byte) 0xD1,
+      (byte) 0x58, (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x00,
       (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-      (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00 };
+      (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00 };
 
   private CardReader() {}
 
