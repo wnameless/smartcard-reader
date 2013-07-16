@@ -30,8 +30,11 @@ public final class AutomatedReader {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         Set<CardResponse> responses = CardReader.read(command);
-        if (lastResponses.addAll(responses) && !lastResponses.isEmpty())
+        if (lastResponses.addAll(responses) && !lastResponses.isEmpty()) {
+          lastResponses.clear();
+          lastResponses.addAll(responses);
           task.execute(responses);
+        }
       }
 
     });
