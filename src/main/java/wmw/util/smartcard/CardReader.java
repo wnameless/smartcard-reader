@@ -36,6 +36,11 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
+/**
+ * 
+ * CardReader is a friendly wrapper to Java smart card API.
+ * 
+ */
 @SuppressWarnings("restriction")
 public final class CardReader {
 
@@ -51,6 +56,14 @@ public final class CardReader {
 
   private CardReader() {}
 
+  /**
+   * Executes a CommandAPDU and returns a Set of CardResponse from all smart
+   * card readers.
+   * 
+   * @param command
+   *          a CommandAPDU
+   * @return a Set of CardResponse
+   */
   public static Set<CardResponse> read(CommandAPDU command) {
     Set<CardResponse> responses = newHashSet();
     for (CardTerminal terminal : getCardTerminals()) {
@@ -69,6 +82,11 @@ public final class CardReader {
     return responses;
   }
 
+  /**
+   * Returns all CardTerminals of the system.
+   * 
+   * @return a List of CardTerminal
+   */
   private static List<CardTerminal> getCardTerminals() {
     TerminalFactory factory = TerminalFactory.getDefault();
     List<CardTerminal> terminals = emptyList();

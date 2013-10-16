@@ -24,24 +24,48 @@ import java.util.Arrays;
 
 import com.google.common.base.Objects;
 
+/**
+ * 
+ * CardResponse holds the information of the result after reading a smart card.
+ * 
+ */
 public final class CardResponse {
 
   private final int channelNum;
   private final byte[] data;
 
+  /**
+   * Creates a CardResponse.
+   * 
+   * @param channelNum
+   *          number of channel
+   * @param data
+   *          an array of byte
+   */
   public CardResponse(int channelNum, byte[] data) {
     this.channelNum = channelNum;
     this.data = data;
   }
 
+  /**
+   * Returns the number of channel.
+   * 
+   * @return an int
+   */
   public int getChannelNum() {
     return channelNum;
   }
 
+  /**
+   * Returns the data after reading a smart card.
+   * 
+   * @return an array of byte
+   */
   public byte[] getData() {
     return Arrays.copyOf(data, data.length);
   }
 
+  @Override
   public boolean equals(Object o) {
     if (o instanceof CardResponse) {
       CardResponse cr = (CardResponse) o;
@@ -50,10 +74,12 @@ public final class CardResponse {
     return false;
   }
 
+  @Override
   public int hashCode() {
     return Objects.hashCode(channelNum, Arrays.hashCode(data));
   }
 
+  @Override
   public String toString() {
     return Objects.toStringHelper(this.getClass())
         .add("ChannelNum", channelNum).add("Data", data).toString();

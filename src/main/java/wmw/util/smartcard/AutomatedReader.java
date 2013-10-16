@@ -31,6 +31,11 @@ import javax.swing.Timer;
 
 import com.google.common.base.Objects;
 
+/**
+ * 
+ * AutomatedReader can continuously perform certain CardTask by a time interval.
+ * 
+ */
 @SuppressWarnings("restriction")
 public final class AutomatedReader {
 
@@ -38,6 +43,14 @@ public final class AutomatedReader {
   private final CardTask task;
   private Timer timer;
 
+  /**
+   * Creates an AutomatedReader.
+   * 
+   * @param command
+   *          a CommandAPDU
+   * @param task
+   *          a CardTask
+   */
   public AutomatedReader(CommandAPDU command, CardTask task) {
     if (command == null || task == null)
       throw new NullPointerException();
@@ -46,6 +59,12 @@ public final class AutomatedReader {
     this.task = task;
   }
 
+  /**
+   * Starts to read smart cards and performs the task continuously.
+   * 
+   * @param time
+   *          in milliseconds
+   */
   public synchronized void reading(int time) {
     final Set<CardResponse> lastResponses = newHashSet();
     timer = new Timer(time, new ActionListener() {
@@ -64,10 +83,14 @@ public final class AutomatedReader {
     timer.start();
   }
 
+  /**
+   * Stops the reading of smart cards.
+   */
   public synchronized void stop() {
     timer.stop();
   }
 
+  @Override
   public String toString() {
     return Objects.toStringHelper(this.getClass()).add("Command", command)
         .add("Task", task).toString();
