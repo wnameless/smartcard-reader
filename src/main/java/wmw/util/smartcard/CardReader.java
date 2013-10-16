@@ -20,6 +20,9 @@
  */
 package wmw.util.smartcard;
 
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Collections.emptyList;
+
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -33,13 +36,12 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
-import com.google.common.base.Objects;
-
-import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.emptyList;
-
 @SuppressWarnings("restriction")
 public final class CardReader {
+
+  public static final CommandAPDU ReadProfileAPDU = new CommandAPDU(new byte[] {
+      (byte) 0x00, (byte) 0xca, (byte) 0x11, (byte) 0x00, (byte) 0x02,
+      (byte) 0x00, (byte) 0x00 });
 
   private static final byte[] SelectAPDU = new byte[] { (byte) 0x00,
       (byte) 0xA4, (byte) 0x04, (byte) 0x00, (byte) 0x10, (byte) 0xD1,
@@ -77,10 +79,6 @@ public final class CardReader {
           e.getMessage());
     }
     return terminals;
-  }
-
-  public String toString() {
-    return Objects.toStringHelper(CardReader.class).toString();
   }
 
 }

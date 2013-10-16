@@ -3,25 +3,17 @@ package wmw.util.smartcard.demo;
 import java.util.Arrays;
 import java.util.Set;
 
-import javax.smartcardio.CommandAPDU;
-
 import wmw.util.smartcard.AutomatedReader;
+import wmw.util.smartcard.CardReader;
 import wmw.util.smartcard.CardResponse;
 import wmw.util.smartcard.CardTask;
 
 import com.ibm.icu.text.CharsetDetector;
 
-@SuppressWarnings("restriction")
 public final class HealthyInsuranceCard {
 
-  private static byte[] ReadProfileAPDU = new byte[] { (byte) 0x00,
-      (byte) 0xca, (byte) 0x11, (byte) 0x00, (byte) 0x02, (byte) 0x00,
-      (byte) 0x00 };
-
-  private static CommandAPDU command = new CommandAPDU(ReadProfileAPDU);
-
   public static void main(String[] args) {
-    new AutomatedReader(command, 1000, new CardTask() {
+    new AutomatedReader(CardReader.ReadProfileAPDU, new CardTask() {
 
       @Override
       public void execute(Set<CardResponse> responses) {
@@ -37,7 +29,7 @@ public final class HealthyInsuranceCard {
         }
       }
 
-    });
+    }).reading(1000);
     while (true) {}
   }
 
