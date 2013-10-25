@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>wmw.util.smartcard</groupId>
+  <artifactId>smartcard-reader</artifactId>
+  <versioning>
+    <release>1.0.0</release>
+    <versions>
+      <version>1.0.0</version>
+    </versions>
+    <lastUpdated>20131025064633</lastUpdated>
+  </versioning>
+</metadata>
