@@ -45,11 +45,11 @@
 					<message>Maven artifacts for ${project.version}</message>
 					<noJekyll>true</noJekyll>
 					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-					<branch>refs/heads/mvn-repo</branch>
+					<branch>refs/heads/${project.version}</branch>
 					<includes>
 						<include>**/*</include>
 					</includes>
-					<repositoryName>${project.name}</repositoryName>
+					<repositoryName>${project.artifactId}</repositoryName>
 					<repositoryOwner>wnameless</repositoryOwner>
 				</configuration>
 				<executions>
