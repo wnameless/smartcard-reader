@@ -20,6 +20,7 @@
  */
 package com.github.wnameless.smartcard;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Sets.newHashSet;
 
 import java.awt.event.ActionEvent;
@@ -52,11 +53,8 @@ public final class AutomatedReader {
    *          a CardTask
    */
   public AutomatedReader(CommandAPDU command, CardTask task) {
-    if (command == null || task == null)
-      throw new NullPointerException();
-
-    this.command = command;
-    this.task = task;
+    this.command = checkNotNull(command);
+    this.task = checkNotNull(task);
   }
 
   /**

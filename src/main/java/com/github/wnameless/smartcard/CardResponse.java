@@ -20,6 +20,8 @@
  */
 package com.github.wnameless.smartcard;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Arrays;
 
 import com.google.common.base.Objects;
@@ -44,7 +46,7 @@ public final class CardResponse {
    */
   public CardResponse(int channelNum, byte[] data) {
     this.channelNum = channelNum;
-    this.data = data;
+    this.data = checkNotNull(data);
   }
 
   /**
