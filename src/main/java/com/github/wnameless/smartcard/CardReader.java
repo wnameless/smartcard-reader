@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package wmw.util.smartcard;
+package com.github.wnameless.smartcard;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptyList;

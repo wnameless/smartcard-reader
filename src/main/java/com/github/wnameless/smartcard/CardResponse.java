@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package wmw.util.smartcard;
+package com.github.wnameless.smartcard;
 
 import java.util.Arrays;
 
@@ -81,8 +81,8 @@ public final class CardResponse {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this.getClass())
-        .add("ChannelNum", channelNum).add("Data", data).toString();
+    return Objects.toStringHelper(getClass()).add("ChannelNum", channelNum)
+        .add("Data", data).toString();
   }
 
 }

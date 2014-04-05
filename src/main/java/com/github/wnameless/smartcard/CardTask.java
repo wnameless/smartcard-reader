@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package wmw.util.smartcard;
+package com.github.wnameless.smartcard;
 
 import java.util.Set;
 

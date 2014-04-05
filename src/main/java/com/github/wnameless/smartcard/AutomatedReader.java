@@ -18,7 +18,7 @@
  * the License.
  *
  */
-package wmw.util.smartcard;
+package com.github.wnameless.smartcard;
 
 import static com.google.common.collect.Sets.newHashSet;
 
@@ -92,7 +92,7 @@ public final class AutomatedReader {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this.getClass()).add("Command", command)
+    return Objects.toStringHelper(getClass()).add("Command", command)
         .add("Task", task).toString();
   }
 
