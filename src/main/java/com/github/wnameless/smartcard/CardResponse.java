@@ -84,7 +84,7 @@ public final class CardResponse {
   @Override
   public String toString() {
     return Objects.toStringHelper(getClass()).add("ChannelNum", channelNum)
-        .add("Data", data).toString();
+        .add("Data", Arrays.toString(data)).toString();
   }
 
 }

@@ -68,8 +68,8 @@ public final class AutomatedReader {
     timer = new Timer(time, new ActionListener() {
 
       @Override
-      public void actionPerformed(ActionEvent arg0) {
-        Set<CardResponse> responses = CardReader.read(command);
+      public void actionPerformed(ActionEvent event) {
+        Set<CardResponse> responses = CardReader.getInstance().read(command);
         if (lastResponses.addAll(responses) && !lastResponses.isEmpty()) {
           lastResponses.clear();
           lastResponses.addAll(responses);

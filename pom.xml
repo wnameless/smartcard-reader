@@ -101,14 +101,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>net.sf.rubycollect4j</groupId>
-			<artifactId>rubycollect4j</artifactId>
-			<version>1.7.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>16.0.1</version>
+			<groupId>com.github.wnameless</groupId>
+			<artifactId>nullproof</artifactId>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -21,7 +21,6 @@
 package com.github.wnameless.smartcard;
 
 import static com.github.wnameless.smartcard.SmartCardAPDU.Select;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptyList;
 
@@ -38,26 +37,36 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
+import com.github.wnameless.nullproof.NullProof;
+
 /**
  * 
  * CardReader is a friendly wrapper to Java smart card API.
  * 
  */
 @SuppressWarnings("restriction")
-public final class CardReader {
+public class CardReader {
 
-  private CardReader() {}
+  private static final Logger logger = Logger.getLogger(CardReader.class
+      .getName());
+
+  private static final CardReader INSTANCE = NullProof.of(CardReader.class);
+
+  CardReader() {}
+
+  public static CardReader getInstance() {
+    return INSTANCE;
+  }
 
   /**
-   * Executes a CommandAPDU and returns a Set of CardResponse from all smart
+   * Returns a Set of CardResponse after executing a CommandAPDU from all smart
    * card readers.
    * 
    * @param command
    *          a CommandAPDU
    * @return a Set of CardResponse
    */
-  public static Set<CardResponse> read(CommandAPDU command) {
-    checkNotNull(command);
+  public Set<CardResponse> read(CommandAPDU command) {
     Set<CardResponse> responses = newHashSet();
     for (CardTerminal terminal : getCardTerminals()) {
       responses.add(getResponse(terminal, command));
@@ -75,13 +84,12 @@ public final class CardReader {
    *          a CommandAPDU
    * @return a CardResponse or null
    */
-  public static CardResponse readOnTerminal(CardTerminal terminal,
-      CommandAPDU command) {
-    return getResponse(checkNotNull(terminal), checkNotNull(command));
+  public CardResponse
+      readOnTerminal(CardTerminal terminal, CommandAPDU command) {
+    return getResponse(terminal, command);
   }
 
-  private static CardResponse getResponse(CardTerminal terminal,
-      CommandAPDU command) {
+  private CardResponse getResponse(CardTerminal terminal, CommandAPDU command) {
     try {
       Card card = terminal.connect("*");
       CardChannel channel = card.getBasicChannel();
@@ -89,8 +97,7 @@ public final class CardReader {
       ResponseAPDU response = channel.transmit(command);
       return new CardResponse(channel.getChannelNumber(), response.getData());
     } catch (CardException e) {
-      Logger.getLogger(CardReader.class.getName()).log(Level.SEVERE, null,
-          e.getMessage());
+      logger.log(Level.SEVERE, null, e.getMessage());
     }
     return null;
   }
@@ -100,16 +107,20 @@ public final class CardReader {
    * 
    * @return a List of CardTerminal
    */
-  public static List<CardTerminal> getCardTerminals() {
+  public List<CardTerminal> getCardTerminals() {
     TerminalFactory factory = TerminalFactory.getDefault();
     List<CardTerminal> terminals = emptyList();
     try {
       terminals = factory.terminals().list();
     } catch (CardException e) {
-      Logger.getLogger(CardReader.class.getName()).log(Level.SEVERE, null,
-          e.getMessage());
+      logger.log(Level.SEVERE, null, e.getMessage());
     }
     return terminals;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
   }
 
 }
