@@ -1,6 +1,6 @@
 package com.github.wnameless.smartcard;
 
-import static com.github.wnameless.smartcard.SmartCardAPDU.ReadProfile;
+import static com.github.wnameless.smartcard.SmartCardAPDU.READ_PROFILE;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
@@ -14,7 +14,7 @@ public class AutomatedReaderTest {
 
   @Before
   public void setUp() throws Exception {
-    ar = new AutomatedReader(ReadProfile, new CardTask() {
+    ar = new AutomatedReader(READ_PROFILE, new CardTask() {
 
       @Override
       public void execute(Set<CardResponse> responses) {}

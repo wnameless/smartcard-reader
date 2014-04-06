@@ -20,7 +20,7 @@
  */
 package com.github.wnameless.smartcard;
 
-import static com.github.wnameless.smartcard.SmartCardAPDU.Select;
+import static com.github.wnameless.smartcard.SmartCardAPDU.SELECT;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptyList;
 
@@ -93,7 +93,7 @@ public class CardReader {
     try {
       Card card = terminal.connect("*");
       CardChannel channel = card.getBasicChannel();
-      channel.transmit(new CommandAPDU(Select));
+      channel.transmit(new CommandAPDU(SELECT));
       ResponseAPDU response = channel.transmit(command);
       return new CardResponse(channel.getChannelNumber(), response.getData());
     } catch (CardException e) {

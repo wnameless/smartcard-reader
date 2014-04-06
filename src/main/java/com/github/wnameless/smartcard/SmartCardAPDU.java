@@ -25,13 +25,13 @@ import javax.smartcardio.CommandAPDU;
 @SuppressWarnings("restriction")
 public final class SmartCardAPDU {
 
-  public static final byte[] Select = new byte[] { (byte) 0x00,
-      (byte) 0xA4, (byte) 0x04, (byte) 0x00, (byte) 0x10, (byte) 0xD1,
-      (byte) 0x58, (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x00,
+  public static final byte[] SELECT = new byte[] { (byte) 0x00, (byte) 0xA4,
+      (byte) 0x04, (byte) 0x00, (byte) 0x10, (byte) 0xD1, (byte) 0x58,
+      (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x00, (byte) 0x00,
       (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-      (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00 };
+      (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00 };
 
-  public static final CommandAPDU ReadProfile = new CommandAPDU(new byte[] {
+  public static final CommandAPDU READ_PROFILE = new CommandAPDU(new byte[] {
       (byte) 0x00, (byte) 0xca, (byte) 0x11, (byte) 0x00, (byte) 0x02,
       (byte) 0x00, (byte) 0x00 });
 
