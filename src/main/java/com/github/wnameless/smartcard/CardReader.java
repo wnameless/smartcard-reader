@@ -20,9 +20,9 @@
  */
 package com.github.wnameless.smartcard;
 
-import static com.github.wnameless.smartcard.SmartCardAPDU.SELECT;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptyList;
+import static net.sf.rubycollect4j.RubyCollections.newRubyArray;
 
 import java.util.List;
 import java.util.Set;
@@ -37,23 +37,26 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
-import com.github.wnameless.nullproof.NullProof;
-
 /**
  * 
  * CardReader is a friendly wrapper to Java smart card API.
  * 
  */
 @SuppressWarnings("restriction")
-public class CardReader {
+public final class CardReader {
 
   private static final Logger logger = Logger.getLogger(CardReader.class
       .getName());
 
-  private static final CardReader INSTANCE = NullProof.of(CardReader.class);
+  private static final CardReader INSTANCE = new CardReader();
 
-  CardReader() {}
+  private CardReader() {}
 
+  /**
+   * Returns the singleton object of {@link CardReader}.
+   * 
+   * @return a {@link CardReader}
+   */
   public static CardReader getInstance() {
     return INSTANCE;
   }
@@ -62,14 +65,14 @@ public class CardReader {
    * Returns a Set of CardResponse after executing a CommandAPDU from all smart
    * card readers.
    * 
-   * @param command
-   *          a CommandAPDU
-   * @return a Set of CardResponse
+   * @param commands
+   *          a List of CommandAPDU
+   * @return a List of CardResponse List
    */
-  public Set<CardResponse> read(CommandAPDU command) {
-    Set<CardResponse> responses = newHashSet();
+  public Set<List<CardResponse>> read(List<CommandAPDU> commands) {
+    Set<List<CardResponse>> responses = newHashSet();
     for (CardTerminal terminal : getCardTerminals()) {
-      responses.add(getResponse(terminal, command));
+      responses.add(getResponse(terminal, commands));
     }
     responses.remove(null);
     return responses;
@@ -77,29 +80,35 @@ public class CardReader {
 
   /**
    * Returns a CardResponse of executed command on specified card terminal.
+   * Returns null if no response.
    * 
    * @param terminal
    *          a CardTerminal
-   * @param command
-   *          a CommandAPDU
-   * @return a CardResponse or null
+   * @param commands
+   *          a List of CommandAPDU
+   * @return a List of CardResponse
    */
-  public CardResponse
-      readOnTerminal(CardTerminal terminal, CommandAPDU command) {
-    return getResponse(terminal, command);
+  public List<CardResponse> readOnTerminal(CardTerminal terminal,
+      List<CommandAPDU> commands) {
+    return getResponse(terminal, commands);
   }
 
-  private CardResponse getResponse(CardTerminal terminal, CommandAPDU command) {
+  private List<CardResponse> getResponse(CardTerminal terminal,
+      List<CommandAPDU> commands) {
+    List<CardResponse> responses = newRubyArray();
     try {
       Card card = terminal.connect("*");
       CardChannel channel = card.getBasicChannel();
-      channel.transmit(new CommandAPDU(SELECT));
-      ResponseAPDU response = channel.transmit(command);
-      return new CardResponse(channel.getChannelNumber(), response.getData());
+      for (CommandAPDU command : commands) {
+        ResponseAPDU res = channel.transmit(command);
+        responses.add(new CardResponse(channel.getChannelNumber(), res
+            .getData()));
+      }
     } catch (CardException e) {
       logger.log(Level.SEVERE, null, e.getMessage());
+      throw new RuntimeException(e);
     }
-    return null;
+    return responses;
   }
 
   /**
@@ -114,6 +123,7 @@ public class CardReader {
       terminals = factory.terminals().list();
     } catch (CardException e) {
       logger.log(Level.SEVERE, null, e.getMessage());
+      throw new RuntimeException(e);
     }
     return terminals;
   }

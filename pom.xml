@@ -64,6 +64,30 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.6</version>
+				<configuration>
+					<complianceLevel>1.6</complianceLevel>
+					<source>1.6</source>
+					<target>1.6</target>
+					<aspectLibraries>
+						<aspectLibrary>
+							<groupId>com.github.wnameless</groupId>
+							<artifactId>nullproof</artifactId>
+						</aspectLibrary>
+					</aspectLibraries>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -87,6 +111,20 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>aspectj-maven-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>compile</goal>
+											<goal>test-compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -101,9 +139,14 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>net.sf.rubycollect4j</groupId>
+			<artifactId>rubycollect4j</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+		<dependency>
 			<groupId>com.github.wnameless</groupId>
 			<artifactId>nullproof</artifactId>
-			<version>0.1.0</version>
+			<version>0.4.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

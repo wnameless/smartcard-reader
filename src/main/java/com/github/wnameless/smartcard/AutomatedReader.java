@@ -20,11 +20,11 @@
  */
 package com.github.wnameless.smartcard;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Sets.newHashSet;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Set;
 
 import javax.smartcardio.CommandAPDU;
@@ -40,7 +40,7 @@ import com.google.common.base.Objects;
 @SuppressWarnings("restriction")
 public final class AutomatedReader {
 
-  private final CommandAPDU command;
+  private final List<CommandAPDU> commands;
   private final CardTask task;
   private Timer timer;
 
@@ -48,13 +48,13 @@ public final class AutomatedReader {
    * Creates an AutomatedReader.
    * 
    * @param command
-   *          a CommandAPDU
+   *          a List of CommandAPDU
    * @param task
    *          a CardTask
    */
-  public AutomatedReader(CommandAPDU command, CardTask task) {
-    this.command = checkNotNull(command);
-    this.task = checkNotNull(task);
+  public AutomatedReader(List<CommandAPDU> commands, CardTask task) {
+    this.commands = commands;
+    this.task = task;
   }
 
   /**
@@ -64,12 +64,13 @@ public final class AutomatedReader {
    *          in milliseconds
    */
   public synchronized void reading(int time) {
-    final Set<CardResponse> lastResponses = newHashSet();
+    final Set<List<CardResponse>> lastResponses = newHashSet();
     timer = new Timer(time, new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent event) {
-        Set<CardResponse> responses = CardReader.getInstance().read(command);
+        Set<List<CardResponse>> responses =
+            CardReader.getInstance().read(commands);
         if (lastResponses.addAll(responses) && !lastResponses.isEmpty()) {
           lastResponses.clear();
           lastResponses.addAll(responses);
@@ -90,7 +91,7 @@ public final class AutomatedReader {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(getClass()).add("Command", command)
+    return Objects.toStringHelper(getClass()).add("Commands", commands)
         .add("Task", task).toString();
   }
 

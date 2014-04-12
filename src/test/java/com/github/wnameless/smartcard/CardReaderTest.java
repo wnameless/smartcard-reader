@@ -3,7 +3,7 @@
  * @author Wei-Ming Wu
  *
  *
- * Copyright 2013 Wei-Ming Wu
+ * Copyright 2014 Wei-Ming Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,22 +20,18 @@
  */
 package com.github.wnameless.smartcard;
 
-import java.util.List;
-import java.util.Set;
+import static net.sf.rubycollect4j.RubyCollections.ra;
 
-/**
- * 
- * CardTask is an interface for CardReader task definition.
- * 
- */
-public interface CardTask {
+import java.util.Arrays;
 
-  /**
-   * Yields a Set of CardResponse to the block.
-   * 
-   * @param responses
-   *          a Set of CardResponse List
-   */
-  void execute(Set<List<CardResponse>> responses);
+public class CardReaderTest {
+
+  public static void main(String[] args) {
+    CardReader cr = CardReader.getInstance();
+    System.out.println(cr.readOnTerminal(cr.getCardTerminals().get(0),
+        Arrays.asList(SmartCardAPDU.SELECT, SmartCardAPDU.READ_PROFILE)));
+
+    System.out.println(ra((byte) 0x10, (byte) 0xD1, (byte) 0x58).pack("b*"));
+  }
 
 }

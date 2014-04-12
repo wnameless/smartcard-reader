@@ -3,7 +3,7 @@
  * @author Wei-Ming Wu
  *
  *
- * Copyright 2013 Wei-Ming Wu
+ * Copyright 2014 Wei-Ming Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,22 +20,10 @@
  */
 package com.github.wnameless.smartcard;
 
-import java.util.List;
-import java.util.Set;
+public final class APDU {
 
-/**
- * 
- * CardTask is an interface for CardReader task definition.
- * 
- */
-public interface CardTask {
+  public static class Builder {
 
-  /**
-   * Yields a Set of CardResponse to the block.
-   * 
-   * @param responses
-   *          a Set of CardResponse List
-   */
-  void execute(Set<List<CardResponse>> responses);
+  }
 
 }
