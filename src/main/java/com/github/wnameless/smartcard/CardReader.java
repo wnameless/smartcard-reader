@@ -39,7 +39,7 @@ import javax.smartcardio.TerminalFactory;
 
 /**
  * 
- * CardReader is a friendly wrapper to Java smart card API.
+ * {@link CardReader} is a friendly wrapper to Java smartcard API.
  * 
  */
 @SuppressWarnings("restriction")
@@ -62,12 +62,12 @@ public final class CardReader {
   }
 
   /**
-   * Returns a Set of CardResponse after executing a CommandAPDU from all smart
-   * card readers.
+   * Returns a Set of {@link CardResponse} after executing a CommandAPDU from
+   * all smart card readers.
    * 
    * @param commands
    *          a List of CommandAPDU
-   * @return a List of CardResponse List
+   * @return a Set of {@link CardResponse} List
    */
   public Set<List<CardResponse>> read(List<CommandAPDU> commands) {
     Set<List<CardResponse>> responses = newHashSet();
@@ -79,14 +79,14 @@ public final class CardReader {
   }
 
   /**
-   * Returns a CardResponse of executed command on specified card terminal.
-   * Returns null if no response.
+   * Returns a {@link CardResponse} of executed command on specified card
+   * terminal. Returns null if no response.
    * 
    * @param terminal
    *          a CardTerminal
    * @param commands
    *          a List of CommandAPDU
-   * @return a List of CardResponse
+   * @return a List of {@link CardResponse}
    */
   public List<CardResponse> readOnTerminal(CardTerminal terminal,
       List<CommandAPDU> commands) {

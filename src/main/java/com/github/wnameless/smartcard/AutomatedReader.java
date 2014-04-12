@@ -34,7 +34,8 @@ import com.google.common.base.Objects;
 
 /**
  * 
- * AutomatedReader can continuously perform certain CardTask by a time interval.
+ * {@link AutomatedReader} can continuously perform certain {@link CardTask} by
+ * a time interval.
  * 
  */
 @SuppressWarnings("restriction")
@@ -45,12 +46,12 @@ public final class AutomatedReader {
   private Timer timer;
 
   /**
-   * Creates an AutomatedReader.
+   * Creates an {@link AutomatedReader}.
    * 
    * @param command
    *          a List of CommandAPDU
    * @param task
-   *          a CardTask
+   *          a {@link CardTask}
    */
   public AutomatedReader(List<CommandAPDU> commands, CardTask task) {
     this.commands = commands;
@@ -58,9 +59,9 @@ public final class AutomatedReader {
   }
 
   /**
-   * Starts to read smart cards and performs the task continuously.
+   * Starts to read smartcards and performs the task continuously.
    * 
-   * @param time
+   * @param timeå
    *          in milliseconds
    */
   public synchronized void reading(int time) {
