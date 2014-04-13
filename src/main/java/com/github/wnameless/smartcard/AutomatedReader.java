@@ -29,8 +29,10 @@ import java.util.Set;
 
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
+import javax.smartcardio.ResponseAPDU;
 import javax.swing.Timer;
 
+import com.github.wnameless.nullproof.annotation.RejectNull;
 import com.google.common.base.Objects;
 import com.google.common.collect.ListMultimap;
 
@@ -41,6 +43,7 @@ import com.google.common.collect.ListMultimap;
  * 
  */
 @SuppressWarnings("restriction")
+@RejectNull
 public final class AutomatedReader {
 
   private final List<CommandAPDU> commands;
@@ -67,12 +70,12 @@ public final class AutomatedReader {
    *          in milliseconds
    */
   public synchronized void reading(int time) {
-    final Set<CardResponse> lastResponses = newHashSet();
+    final Set<ResponseAPDU> lastResponses = newHashSet();
     timer = new Timer(time, new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent event) {
-        ListMultimap<CardTerminal, CardResponse> responses =
+        ListMultimap<CardTerminal, ResponseAPDU> responses =
             CardReader.getInstance().read(commands);
         if (lastResponses.addAll(responses.values())
             && !lastResponses.isEmpty()) {

@@ -23,6 +23,7 @@ package com.github.wnameless.smartcard;
 import java.util.List;
 
 import javax.smartcardio.CardTerminal;
+import javax.smartcardio.ResponseAPDU;
 
 /**
  * 
@@ -33,13 +34,13 @@ import javax.smartcardio.CardTerminal;
 public interface CardTask {
 
   /**
-   * Yields a List of {@link CardResponse} to the block.
+   * Yields a List of ResponseAPDU to the block.
    * 
    * @param terminal
    *          a CardTerminal
    * @param responses
-   *          a List of {@link CardResponse}
+   *          a List of ResponseAPDU
    */
-  void execute(CardTerminal terminal, List<CardResponse> responses);
+  void execute(CardTerminal terminal, List<ResponseAPDU> responses);
 
 }

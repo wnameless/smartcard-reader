@@ -68,28 +68,28 @@ public final class CardReader {
   }
 
   /**
-   * Returns a Multimap&lt;CardTerminal, {@link CardResponse}&gt; after
-   * executing a set of CommandAPDU on all Smartcard readers.
+   * Returns a Multimap&lt;CardTerminal, ResponseAPDU&gt; after executing a set
+   * of CommandAPDU on all Smartcard readers.
    * 
    * @param commands
    *          an Array of CommandAPDU
-   * @return a ListMultimap&lt;CardTerminal, {@link CardResponse}&gt
+   * @return a ListMultimap&lt;CardTerminal, ResponseAPDU&gt
    */
-  public ListMultimap<CardTerminal, CardResponse> read(CommandAPDU... commands) {
+  public ListMultimap<CardTerminal, ResponseAPDU> read(CommandAPDU... commands) {
     return read(Arrays.asList(commands));
   }
 
   /**
-   * Returns a Multimap&lt;CardTerminal, {@link CardResponse}&gt; after
-   * executing a set of CommandAPDU on all Smartcard readers.
+   * Returns a Multimap&lt;CardTerminal, ResponseAPDU&gt; after executing a set
+   * of CommandAPDU on all Smartcard readers.
    * 
    * @param commands
    *          a List of CommandAPDU
-   * @return a ListMultimap&lt;CardTerminal, {@link CardResponse}&gt;
+   * @return a ListMultimap&lt;CardTerminal, ResponseAPDU&gt;
    */
-  public ListMultimap<CardTerminal, CardResponse> read(
+  public ListMultimap<CardTerminal, ResponseAPDU> read(
       List<CommandAPDU> commands) {
-    ListMultimap<CardTerminal, CardResponse> responses =
+    ListMultimap<CardTerminal, ResponseAPDU> responses =
         ArrayListMultimap.create();
     for (CardTerminal terminal : getCardTerminals()) {
       responses.putAll(terminal, getResponse(terminal, commands));
@@ -97,7 +97,7 @@ public final class CardReader {
     return responses;
   }
 
-  public List<CardResponse> readOnTerminal(CardTerminal terminal,
+  public List<ResponseAPDU> readOnTerminal(CardTerminal terminal,
       CommandAPDU... commands) {
     return readOnTerminal(terminal, Arrays.asList(commands));
   }
@@ -112,21 +112,20 @@ public final class CardReader {
    *          a List of CommandAPDU
    * @return a List of {@link CardResponse}
    */
-  public List<CardResponse> readOnTerminal(CardTerminal terminal,
+  public List<ResponseAPDU> readOnTerminal(CardTerminal terminal,
       List<CommandAPDU> commands) {
     return getResponse(terminal, commands);
   }
 
-  private List<CardResponse> getResponse(CardTerminal terminal,
+  private List<ResponseAPDU> getResponse(CardTerminal terminal,
       List<CommandAPDU> commands) {
-    List<CardResponse> responses = newArrayList();
+    List<ResponseAPDU> responses = newArrayList();
     try {
       Card card = terminal.connect("*");
       CardChannel channel = card.getBasicChannel();
       for (CommandAPDU command : commands) {
-        ResponseAPDU res = channel.transmit(command);
-        responses.add(new CardResponse(channel.getChannelNumber(), res
-            .getData()));
+        ResponseAPDU response = channel.transmit(command);
+        responses.add(response);
       }
     } catch (CardException e) {
       logger.log(Level.SEVERE, null, e.getMessage());
