@@ -2,4 +2,6 @@
 .classpath
 /.settings
 /target
+
+/doc
 .DS_Store

@@ -106,7 +106,7 @@ public final class AutomatedReader {
   }
 
   /**
-   * Stops the reading of smart cards.
+   * Stops the reading of smartcards.
    */
   public synchronized void stop() {
     if (timer != null)

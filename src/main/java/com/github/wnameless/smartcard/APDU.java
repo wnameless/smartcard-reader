@@ -69,21 +69,49 @@ public final class APDU {
     private byte[] data = null;
     private byte[] le = null;
 
+    /**
+     * Sets the CLA byte, default is 0x00.
+     * 
+     * @param claByte
+     *          a CLA byte
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder setCLA(byte claByte) {
       apdu[0] = claByte;
       return this;
     }
 
+    /**
+     * Sets the INS byte, default is 0x00.
+     * 
+     * @param insByte
+     *          a INS byte
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder setINS(byte insByte) {
       apdu[1] = insByte;
       return this;
     }
 
+    /**
+     * Sets the P1 byte, default is 0x00.
+     * 
+     * @param p1Byte
+     *          a P1 byte
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder setP1(byte p1Byte) {
       apdu[2] = p1Byte;
       return this;
     }
 
+    /**
+     * Sets the P2 byte, default is 0x00.
+     * 
+     * @param p2Byte
+     *          a byte
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder setP2(byte p2Byte) {
       apdu[3] = p2Byte;
       return this;
@@ -112,6 +140,14 @@ public final class APDU {
       return this;
     }
 
+    /**
+     * Sets the DATA bytes, default is empty.<br>
+     * If the DATA is set, a Lc bytes is set automatically as well.
+     * 
+     * @param dataBytes
+     *          the DATA bytes
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder setData(byte... dataBytes) {
       checkArgument(dataBytes.length >= 1 && dataBytes.length <= 65535,
           "Data length is between 1..65535");
@@ -120,6 +156,14 @@ public final class APDU {
       return this;
     }
 
+    /**
+     * Sets the DATA bytes by given HEX string, default is empty.<br>
+     * If the DATA is set, a Lc bytes are set automatically as well.
+     * 
+     * @param hexString
+     *          a hex string
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder setData(String hexString) {
       RubyString hexStr = rs(hexString).slice(qr("^[0-9A-Fa-f]+"));
       if (hexStr == null) {
@@ -144,11 +188,24 @@ public final class APDU {
       return this;
     }
 
+    /**
+     * Deletes the DATA bytes.<br>
+     * If the DATA is deleted, the Lc bytes are deleted automatically as well.
+     * 
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder clearData() {
       clearLc();
       return this;
     }
 
+    /**
+     * Sets the Le bytes, default is empty.
+     * 
+     * @param leLength
+     *          length of Le
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder setLe(int leLength) {
       checkArgument(leLength >= 1 && leLength <= 65535,
           "Le is between 1..65535");
@@ -156,6 +213,11 @@ public final class APDU {
       return this;
     }
 
+    /**
+     * Deletes the Le bytes.
+     * 
+     * @return this {@link APDUBuilder}
+     */
     public APDUBuilder clearLe() {
       le = null;
       return this;

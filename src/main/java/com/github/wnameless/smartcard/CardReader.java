@@ -147,7 +147,7 @@ public final class CardReader {
   }
 
   /**
-   * Returns all CardTerminals of the system.
+   * Returns all card terminals of the system.
    * 
    * @return a List of CardTerminal
    */
