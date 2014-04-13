@@ -24,12 +24,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
+import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
+import javax.smartcardio.ResponseAPDU;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
 
 public class AutomatedReaderTest {
@@ -49,17 +53,42 @@ public class AutomatedReaderTest {
   }
 
   @Test
-  public void testAllNPE() {
+  public void testAllNPE() throws Exception {
     NullPointerTester tester = new NullPointerTester();
     tester.testAllPublicConstructors(AutomatedReader.class);
-    tester.testAllPublicInstanceMethods(reader);
+    tester.ignore(AutomatedReader.class.getMethod("equals", Object.class))
+        .testAllPublicInstanceMethods(reader);
     tester.testAllPublicStaticMethods(AutomatedReader.class);
+  }
+
+  @Test
+  public void testEquality() {
+    new EqualsTester().addEqualityGroup(reader, new AutomatedReader(commands),
+        new AutomatedReader(commands)).testEquals();
   }
 
   @Test
   public void testConstructors() {
     assertTrue(new AutomatedReader(commands) instanceof AutomatedReader);
     assertTrue(new AutomatedReader(Arrays.asList(commands)) instanceof AutomatedReader);
+  }
+
+  @Test
+  public void testReading() {
+    CardTask task1 = new CardTask() {
+
+      @Override
+      public void execute(CardTerminal terminal, List<ResponseAPDU> responses) {}
+
+    };
+    CardTask task2 = new CardTask() {
+
+      @Override
+      public void execute(CardTerminal terminal, List<ResponseAPDU> responses) {}
+
+    };
+    reader.reading(1000, task1);
+    reader.reading(1000, task2);
   }
 
   @Test

@@ -70,7 +70,12 @@ public final class AutomatedReader {
   }
 
   /**
-   * Starts to read Smartcards and performs the task continuously.
+   * Starts to read smartcards and performs a {@link CardTask} continuously.
+   * This {@link CardTask} is only performed if there is any CHANGE on the
+   * responses from card terminals.<br>
+   * <br>
+   * If this method is called again, the previous {@link CardTask} will be
+   * stopped and the new {@link CardTask} will perform.
    * 
    * @param time
    *          in milliseconds
@@ -106,6 +111,20 @@ public final class AutomatedReader {
   public synchronized void stop() {
     if (timer != null)
       timer.stop();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof AutomatedReader) {
+      AutomatedReader ar = (AutomatedReader) o;
+      return Objects.equal(commands, ar.commands);
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(commands);
   }
 
   @Override
