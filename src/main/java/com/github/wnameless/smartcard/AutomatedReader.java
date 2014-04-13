@@ -78,6 +78,7 @@ public final class AutomatedReader {
    *          a {@link CardTask}
    */
   public synchronized void reading(int time, final CardTask task) {
+    stop();
     final Set<ResponseAPDU> lastResponses = newHashSet();
     timer = new Timer(time, new ActionListener() {
 
