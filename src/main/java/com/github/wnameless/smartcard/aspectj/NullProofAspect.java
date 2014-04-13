@@ -3,7 +3,7 @@
  * @author Wei-Ming Wu
  *
  *
- * Copyright 2013 Wei-Ming Wu
+ * Copyright 2014 Wei-Ming Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,28 +18,11 @@
  * the License.
  *
  */
-package com.github.wnameless.smartcard;
+package com.github.wnameless.smartcard.aspectj;
 
-import java.util.List;
+import org.aspectj.lang.annotation.Aspect;
 
-import javax.smartcardio.CardTerminal;
-import javax.smartcardio.ResponseAPDU;
+import com.github.wnameless.nullproof.aspectj.AbstractNullProofAspect;
 
-/**
- * 
- * {@link CardTask} is used to define a {@link CardReader} task.
- * 
- */
-public interface CardTask {
-
-  /**
-   * Yields a List of ResponseAPDU to the block.
-   * 
-   * @param terminal
-   *          a CardTerminal
-   * @param responses
-   *          a List of ResponseAPDU
-   */
-  void execute(CardTerminal terminal, List<ResponseAPDU> responses);
-
-}
+@Aspect
+public class NullProofAspect extends AbstractNullProofAspect {}

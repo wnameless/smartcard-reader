@@ -27,6 +27,8 @@ package com.github.wnameless.smartcard;
  */
 public final class INS {
 
+  private INS() {}
+
   public static final byte ERASE_BINARY = (byte) 0x0E;
   public static final byte VERIFY = (byte) 0x20;
   public static final byte MANAGE_CHANNEL = (byte) 0x70;

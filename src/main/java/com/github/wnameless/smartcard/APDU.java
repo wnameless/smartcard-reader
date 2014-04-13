@@ -35,76 +35,79 @@ import com.google.common.primitives.Bytes;
  * easier.
  *
  */
-@SuppressWarnings("restriction")
 @RejectNull
 public final class APDU {
+
+  private APDU() {}
 
   /**
    * Returns a builder of CommandAPDU.
    * 
-   * @return a {@link ExtendedAPDUHolder}
+   * @return a {@link APDUBuilder}
    */
-  public static ExtendedAPDUHolder builder() {
-    return new ExtendedAPDUHolder();
+  public static APDUBuilder builder() {
+    return new APDUBuilder();
   }
 
   /**
    * 
-   * {@link ExtendedAPDUHolder} is designed to hold input data from user before
-   * a CommandAPDU is created.
+   * {@link APDUBuilder} is designed to hold input data from user before a
+   * CommandAPDU is created.
    *
    */
   @RejectNull
-  public static class ExtendedAPDUHolder {
+  public static class APDUBuilder {
 
     private final byte[] apdu = new byte[4];
     private byte[] lc = null;
     private byte[] data = null;
     private byte[] le = null;
 
-    public ExtendedAPDUHolder setCLA(byte claByte) {
+    public APDUBuilder setCLA(byte claByte) {
       apdu[0] = claByte;
       return this;
     }
 
-    public ExtendedAPDUHolder setINS(byte insByte) {
+    public APDUBuilder setINS(byte insByte) {
       apdu[1] = insByte;
       return this;
     }
 
-    public ExtendedAPDUHolder setP1(byte p1Byte) {
+    public APDUBuilder setP1(byte p1Byte) {
       apdu[2] = p1Byte;
       return this;
     }
 
-    public ExtendedAPDUHolder setP2(byte p2Byte) {
+    public APDUBuilder setP2(byte p2Byte) {
       apdu[3] = p2Byte;
       return this;
     }
 
-    @Deprecated
-    public ExtendedAPDUHolder setLc(int lcLength) {
+    private APDUBuilder setLc(int lcLength) {
       checkArgument(lcLength >= 1 && lcLength <= 65535,
           "Lc is between 1..65535");
-      if (lcLength < 255) {
-        lc = new byte[] { (byte) lcLength };
-      } else {
-        ByteBuffer buffer = ByteBuffer.allocate(3);
-        buffer.position(1);
-        lc = buffer.putShort((short) lcLength).array();
-      }
-      data = new byte[lcLength];
+      data = lengthOfData(lcLength);
       return this;
     }
 
-    @Deprecated
-    public ExtendedAPDUHolder clearLc() {
+    private byte[] lengthOfData(int length) {
+      if (length < 255) {
+        lc = new byte[] { (byte) length };
+      } else {
+        ByteBuffer buffer = ByteBuffer.allocate(3);
+        buffer.position(1);
+        lc = buffer.putShort((short) length).array();
+      }
+      return new byte[length];
+    }
+
+    private APDUBuilder clearLc() {
       lc = null;
       data = null;
       return this;
     }
 
-    public ExtendedAPDUHolder setData(byte... dataBytes) {
+    public APDUBuilder setData(byte... dataBytes) {
       checkArgument(dataBytes.length >= 1 && dataBytes.length <= 65535,
           "Data length is between 1..65535");
       setLc(dataBytes.length);
@@ -112,26 +115,19 @@ public final class APDU {
       return this;
     }
 
-    public ExtendedAPDUHolder clearData() {
-      lc = null;
-      data = null;
+    public APDUBuilder clearData() {
+      clearLc();
       return this;
     }
 
-    public ExtendedAPDUHolder setLe(int leLength) {
+    public APDUBuilder setLe(int leLength) {
       checkArgument(leLength >= 1 && leLength <= 65536,
           "Le is between 1..65535");
-      if (leLength < 255) {
-        le = new byte[] { (byte) leLength };
-      } else {
-        ByteBuffer buffer = ByteBuffer.allocate(3);
-        buffer.position(1);
-        le = buffer.putShort((short) leLength).array();
-      }
+      le = lengthOfData(leLength);
       return this;
     }
 
-    public ExtendedAPDUHolder clearLe() {
+    public APDUBuilder clearLe() {
       le = null;
       return this;
     }

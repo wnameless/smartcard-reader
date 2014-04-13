@@ -20,6 +20,7 @@
  */
 package com.github.wnameless.smartcard;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 
 import java.awt.event.ActionEvent;
@@ -42,13 +43,15 @@ import com.google.common.collect.ListMultimap;
  * a time interval.
  * 
  */
-@SuppressWarnings("restriction")
 @RejectNull
 public final class AutomatedReader {
 
   private final List<CommandAPDU> commands;
-  private final CardTask task;
   private Timer timer;
+
+  public AutomatedReader(CommandAPDU... commands) {
+    this.commands = newArrayList(commands);
+  }
 
   /**
    * Creates an {@link AutomatedReader}.
@@ -58,9 +61,8 @@ public final class AutomatedReader {
    * @param task
    *          a {@link CardTask}
    */
-  public AutomatedReader(List<CommandAPDU> commands, CardTask task) {
-    this.commands = commands;
-    this.task = task;
+  public AutomatedReader(List<CommandAPDU> commands) {
+    this.commands = newArrayList(commands);
   }
 
   /**
@@ -69,7 +71,7 @@ public final class AutomatedReader {
    * @param time
    *          in milliseconds
    */
-  public synchronized void reading(int time) {
+  public synchronized void reading(int time, final CardTask task) {
     final Set<ResponseAPDU> lastResponses = newHashSet();
     timer = new Timer(time, new ActionListener() {
 

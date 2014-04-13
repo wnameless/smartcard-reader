@@ -36,6 +36,7 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
+import com.github.wnameless.nullproof.annotation.RejectNull;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 
@@ -48,7 +49,7 @@ import com.google.common.collect.ListMultimap;
  * It's a singeton.
  * 
  */
-@SuppressWarnings("restriction")
+@RejectNull
 public final class CardReader {
 
   private static final Logger logger = Logger.getLogger(CardReader.class
