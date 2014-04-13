@@ -27,10 +27,12 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Set;
 
+import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
 import javax.swing.Timer;
 
 import com.google.common.base.Objects;
+import com.google.common.collect.ListMultimap;
 
 /**
  * 
@@ -59,23 +61,26 @@ public final class AutomatedReader {
   }
 
   /**
-   * Starts to read smartcards and performs the task continuously.
+   * Starts to read Smartcards and performs the task continuously.
    * 
-   * @param timeå
+   * @param time
    *          in milliseconds
    */
   public synchronized void reading(int time) {
-    final Set<List<CardResponse>> lastResponses = newHashSet();
+    final Set<CardResponse> lastResponses = newHashSet();
     timer = new Timer(time, new ActionListener() {
 
       @Override
       public void actionPerformed(ActionEvent event) {
-        Set<List<CardResponse>> responses =
+        ListMultimap<CardTerminal, CardResponse> responses =
             CardReader.getInstance().read(commands);
-        if (lastResponses.addAll(responses) && !lastResponses.isEmpty()) {
+        if (lastResponses.addAll(responses.values())
+            && !lastResponses.isEmpty()) {
           lastResponses.clear();
-          lastResponses.addAll(responses);
-          task.execute(responses);
+          lastResponses.addAll(responses.values());
+          for (CardTerminal terminal : responses.keys()) {
+            task.execute(terminal, responses.get(terminal));
+          }
         }
       }
 
@@ -92,8 +97,7 @@ public final class AutomatedReader {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(getClass()).add("Commands", commands)
-        .add("Task", task).toString();
+    return Objects.toStringHelper(getClass()).addValue(commands).toString();
   }
 
 }

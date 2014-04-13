@@ -29,14 +29,32 @@ import javax.smartcardio.CommandAPDU;
 import com.github.wnameless.nullproof.annotation.RejectNull;
 import com.google.common.primitives.Bytes;
 
+/**
+ * 
+ * {@link APDU} is a helper class designed to make the creation of a CommandAPDU
+ * easier.
+ *
+ */
 @SuppressWarnings("restriction")
 @RejectNull
 public final class APDU {
 
+  /**
+   * Returns a builder of CommandAPDU.
+   * 
+   * @return a {@link ExtendedAPDUHolder}
+   */
   public static ExtendedAPDUHolder builder() {
     return new ExtendedAPDUHolder();
   }
 
+  /**
+   * 
+   * {@link ExtendedAPDUHolder} is designed to hold input data from user before
+   * a CommandAPDU is created.
+   *
+   */
+  @RejectNull
   public static class ExtendedAPDUHolder {
 
     private final byte[] apdu = new byte[4];
@@ -118,6 +136,11 @@ public final class APDU {
       return this;
     }
 
+    /**
+     * Returns a CommandAPDU by user given data.
+     * 
+     * @return a CommandAPDU
+     */
     public CommandAPDU build() {
       byte[] finalApdu = apdu;
       if (lc != null)
@@ -131,7 +154,7 @@ public final class APDU {
 
   /**
    * 
-   * {@link INS APDU.INS} defines all INS codes of ISO/IEC 7816.
+   * {@link INS APDU.INS} defines all Smartcard INS codes of ISO/IEC 7816.
    *
    */
   public static class INS {

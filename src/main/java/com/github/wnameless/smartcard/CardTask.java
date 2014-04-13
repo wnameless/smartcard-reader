@@ -21,21 +21,25 @@
 package com.github.wnameless.smartcard;
 
 import java.util.List;
-import java.util.Set;
+
+import javax.smartcardio.CardTerminal;
 
 /**
  * 
- * CardTask is an interface for CardReader task definition.
+ * {@link CardTask} is used to define a {@link CardReader} task.
  * 
  */
+@SuppressWarnings("restriction")
 public interface CardTask {
 
   /**
-   * Yields a Set of CardResponse to the block.
+   * Yields a List of {@link CardResponse} to the block.
    * 
+   * @param terminal
+   *          a CardTerminal
    * @param responses
-   *          a Set of CardResponse List
+   *          a List of {@link CardResponse}
    */
-  void execute(Set<List<CardResponse>> responses);
+  void execute(CardTerminal terminal, List<CardResponse> responses);
 
 }

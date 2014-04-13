@@ -35,4 +35,5 @@ public class CardReaderTest {
         APDU.builder().setINS(APDU.INS.GET_DATA).setP1((byte) 0x11)
             .setData((byte) 0x00, (byte) 0x00).build()));
   }
+
 }

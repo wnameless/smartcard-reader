@@ -20,13 +20,11 @@
  */
 package com.github.wnameless.smartcard;
 
-import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
-import static net.sf.rubycollect4j.RubyCollections.newRubyArray;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,9 +36,16 @@ import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+
 /**
  * 
- * {@link CardReader} is a friendly wrapper to Java smartcard API.
+ * {@link CardReader} is a friendly wrapper to Java Smartcard API. It can
+ * execute a set of CommandAPDU to all or specified card readers and return the
+ * responses back.<br>
+ * <br>
+ * It's a singeton.
  * 
  */
 @SuppressWarnings("restriction")
@@ -54,7 +59,7 @@ public final class CardReader {
   private CardReader() {}
 
   /**
-   * Returns the singleton object of {@link CardReader}.
+   * Returns the instance of {@link CardReader}.
    * 
    * @return a {@link CardReader}
    */
@@ -62,24 +67,33 @@ public final class CardReader {
     return INSTANCE;
   }
 
-  public Set<List<CardResponse>> read(CommandAPDU... commands) {
+  /**
+   * Returns a Multimap&lt;CardTerminal, {@link CardResponse}&gt; after
+   * executing a set of CommandAPDU on all Smartcard readers.
+   * 
+   * @param commands
+   *          an Array of CommandAPDU
+   * @return a ListMultimap&lt;CardTerminal, {@link CardResponse}&gt
+   */
+  public ListMultimap<CardTerminal, CardResponse> read(CommandAPDU... commands) {
     return read(Arrays.asList(commands));
   }
 
   /**
-   * Returns a Set of {@link CardResponse} after executing a CommandAPDU from
-   * all smart card readers.
+   * Returns a Multimap&lt;CardTerminal, {@link CardResponse}&gt; after
+   * executing a set of CommandAPDU on all Smartcard readers.
    * 
    * @param commands
    *          a List of CommandAPDU
-   * @return a Set of {@link CardResponse} List
+   * @return a ListMultimap&lt;CardTerminal, {@link CardResponse}&gt;
    */
-  public Set<List<CardResponse>> read(List<CommandAPDU> commands) {
-    Set<List<CardResponse>> responses = newHashSet();
+  public ListMultimap<CardTerminal, CardResponse> read(
+      List<CommandAPDU> commands) {
+    ListMultimap<CardTerminal, CardResponse> responses =
+        ArrayListMultimap.create();
     for (CardTerminal terminal : getCardTerminals()) {
-      responses.add(getResponse(terminal, commands));
+      responses.putAll(terminal, getResponse(terminal, commands));
     }
-    responses.remove(null);
     return responses;
   }
 
@@ -90,7 +104,7 @@ public final class CardReader {
 
   /**
    * Returns a {@link CardResponse} of executed command on specified card
-   * terminal. Returns null if no response.
+   * terminal.
    * 
    * @param terminal
    *          a CardTerminal
@@ -105,7 +119,7 @@ public final class CardReader {
 
   private List<CardResponse> getResponse(CardTerminal terminal,
       List<CommandAPDU> commands) {
-    List<CardResponse> responses = newRubyArray();
+    List<CardResponse> responses = newArrayList();
     try {
       Card card = terminal.connect("*");
       CardChannel channel = card.getBasicChannel();
