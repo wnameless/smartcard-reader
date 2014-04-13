@@ -16,12 +16,14 @@ Intend to make the creation of CommandAPDU easier and get the ResponseAPDUs from
 
 #Quick Start
 ```java
+// It's an example of reading a TWN Health Insurance Card
 CommandAPDU cmd1 = APDU.builder().setINS(INS.SELECT_FILE).setP1((byte) 0x04)
-                                 .setData("D1580000010000000000000000001100").build();
+                                 .setData("D1580000010000000000000000001100").build(); // Lc field is set automatically by given data length
 CommandAPDU cmd2 = APDU.builder().setINS(INS.GET_DATA).setP1((byte) 0x11)
                                  .setData("0000").build());
 
-Multimap<CardTerminal, ResponseAPDU> res = CardReader.getInstance().read(cmd1, cmd2);
+ListMultimap<CardTerminal, ResponseAPDU> res // Each value stores all ResponseAPDUs of a CardTerminal
+    = CardReader.getInstance().read(cmd1, cmd2);
 ```
 
 #Feature
@@ -35,4 +37,8 @@ reader.reading(1000, new CardTask() { // It reads from all CardChannels every se
     }
 
 });
+
+...
+
+reader.stop();
 ```
