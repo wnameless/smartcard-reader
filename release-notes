@@ -1,0 +1,7 @@
+Version 1.0.0
++ First release
+
+Version 1.1.0
+* Moved to Maven central repo
+* Major API changed
++ Added APDUBuilder
