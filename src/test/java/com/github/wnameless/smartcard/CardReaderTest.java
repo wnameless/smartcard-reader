@@ -26,13 +26,13 @@ public class CardReaderTest {
     CardReader cr = CardReader.getInstance();
     System.out.println(cr.read(
         APDU.builder()
-            .setINS(APDU.INS.SELECT_FILE)
+            .setINS(INS.SELECT_FILE)
             .setP1((byte) 0x04)
             .setData((byte) 0xD1, (byte) 0x58, (byte) 0x00, (byte) 0x00,
                 (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
                 (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00).build(),
-        APDU.builder().setINS(APDU.INS.GET_DATA).setP1((byte) 0x11)
+        APDU.builder().setINS(INS.GET_DATA).setP1((byte) 0x11)
             .setData((byte) 0x00, (byte) 0x00).build()));
   }
 

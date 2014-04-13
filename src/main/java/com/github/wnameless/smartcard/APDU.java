@@ -152,32 +152,4 @@ public final class APDU {
 
   }
 
-  /**
-   * 
-   * {@link INS APDU.INS} defines all Smartcard INS codes of ISO/IEC 7816.
-   *
-   */
-  public static class INS {
-
-    public static final byte ERASE_BINARY = (byte) 0x0E;
-    public static final byte VERIFY = (byte) 0x20;
-    public static final byte MANAGE_CHANNEL = (byte) 0x70;
-    public static final byte EXTERNAL_AUTHENTICATE = (byte) 0x82;
-    public static final byte GET_CHALLENGE = (byte) 0x84;
-    public static final byte INTERNAL_AUTHENTICATE = (byte) 0x88;
-    public static final byte SELECT_FILE = (byte) 0xA4;
-    public static final byte READ_BINARY = (byte) 0xB0;
-    public static final byte READ_RECORD = (byte) 0xB2;
-    public static final byte GET_RESPONSE = (byte) 0xC0;
-    public static final byte ENVELOPE = (byte) 0xC2;
-    public static final byte GET_DATA = (byte) 0xCA;
-    public static final byte WRITE_BINARY = (byte) 0xD0;
-    public static final byte WRITE_RECORD = (byte) 0xD2;
-    public static final byte UPDATE_BINARY = (byte) 0xD6;
-    public static final byte PUT_DATA = (byte) 0xDA;
-    public static final byte UPDATE_DATA = (byte) 0xDC;
-    public static final byte APPEND_RECORD = (byte) 0xE2;
-
-  }
-
 }
