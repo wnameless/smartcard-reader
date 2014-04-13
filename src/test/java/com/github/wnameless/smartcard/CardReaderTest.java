@@ -20,18 +20,19 @@
  */
 package com.github.wnameless.smartcard;
 
-import static net.sf.rubycollect4j.RubyCollections.ra;
-
-import java.util.Arrays;
-
 public class CardReaderTest {
 
   public static void main(String[] args) {
     CardReader cr = CardReader.getInstance();
-    System.out.println(cr.readOnTerminal(cr.getCardTerminals().get(0),
-        Arrays.asList(SmartCardAPDU.SELECT, SmartCardAPDU.READ_PROFILE)));
-
-    System.out.println(ra((byte) 0x10, (byte) 0xD1, (byte) 0x58).pack("b*"));
+    System.out.println(cr.read(
+        APDU.builder()
+            .setINS(APDU.INS.SELECT_FILE)
+            .setP1((byte) 0x04)
+            .setData((byte) 0xD1, (byte) 0x58, (byte) 0x00, (byte) 0x00,
+                (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00).build(),
+        APDU.builder().setINS(APDU.INS.GET_DATA).setP1((byte) 0x11)
+            .setData((byte) 0x00, (byte) 0x00).build()));
   }
-
 }

@@ -24,6 +24,7 @@ import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.emptyList;
 import static net.sf.rubycollect4j.RubyCollections.newRubyArray;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -61,6 +62,10 @@ public final class CardReader {
     return INSTANCE;
   }
 
+  public Set<List<CardResponse>> read(CommandAPDU... commands) {
+    return read(Arrays.asList(commands));
+  }
+
   /**
    * Returns a Set of {@link CardResponse} after executing a CommandAPDU from
    * all smart card readers.
@@ -76,6 +81,11 @@ public final class CardReader {
     }
     responses.remove(null);
     return responses;
+  }
+
+  public List<CardResponse> readOnTerminal(CardTerminal terminal,
+      CommandAPDU... commands) {
+    return readOnTerminal(terminal, Arrays.asList(commands));
   }
 
   /**
