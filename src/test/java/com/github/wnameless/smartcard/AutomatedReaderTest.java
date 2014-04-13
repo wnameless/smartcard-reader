@@ -41,15 +41,10 @@ public class AutomatedReaderTest {
   public void setUp() throws Exception {
     commands =
         new CommandAPDU[] {
-            APDU.builder()
-                .setINS(INS.SELECT_FILE)
-                .setP1((byte) 0x04)
-                .setData((byte) 0xD1, (byte) 0x58, (byte) 0x00, (byte) 0x00,
-                    (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                    (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                    (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00).build(),
+            APDU.builder().setINS(INS.SELECT_FILE).setP1((byte) 0x04)
+                .setData("D1580000010000000000000000001100").build(),
             APDU.builder().setINS(INS.GET_DATA).setP1((byte) 0x11)
-                .setData((byte) 0x00, (byte) 0x00).build() };
+                .setData("0000").build() };
     reader = new AutomatedReader(commands);
   }
 

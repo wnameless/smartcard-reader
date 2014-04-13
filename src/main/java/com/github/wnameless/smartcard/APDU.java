@@ -21,10 +21,16 @@
 package com.github.wnameless.smartcard;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static net.sf.rubycollect4j.RubyCollections.qr;
+import static net.sf.rubycollect4j.RubyCollections.rs;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import javax.smartcardio.CommandAPDU;
+
+import net.sf.rubycollect4j.RubyString;
 
 import com.github.wnameless.nullproof.annotation.RejectNull;
 import com.google.common.primitives.Bytes;
@@ -111,6 +117,30 @@ public final class APDU {
           "Data length is between 1..65535");
       setLc(dataBytes.length);
       data = dataBytes;
+      return this;
+    }
+
+    public APDUBuilder setData(String hexString) {
+      RubyString hexStr = rs(hexString).slice(qr("^[0-9A-Fa-f]+"));
+      if (hexStr == null) {
+        lc = null;
+        data = null;
+      } else {
+        int suffixZero = hexStr.size() % 2;
+        if (suffixZero != 0)
+          hexStr.concat("0");
+        data = new BigInteger(hexStr.toS(), 16).toByteArray();
+        if (data.length < hexStr.length() / 2) {
+          int prefixBytesNum = hexStr.length() / 2 - data.length;
+          byte[] prefixBytes = new byte[prefixBytesNum];
+          data = Bytes.concat(prefixBytes, data);
+        } else if (data.length > hexStr.length() / 2) {
+          data =
+              Arrays.copyOfRange(data, data.length - hexStr.length() / 2,
+                  data.length);
+        }
+        setLc(data.length);
+      }
       return this;
     }
 
