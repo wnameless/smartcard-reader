@@ -84,21 +84,20 @@ public final class APDU {
     }
 
     private APDUBuilder setLc(int lcLength) {
-      checkArgument(lcLength >= 1 && lcLength <= 65535,
-          "Lc is between 1..65535");
-      data = lengthOfData(lcLength);
+      lc = lengthOfData(lcLength);
       return this;
     }
 
     private byte[] lengthOfData(int length) {
+      byte[] lenBytes;
       if (length < 255) {
-        lc = new byte[] { (byte) length };
+        lenBytes = new byte[] { (byte) length };
       } else {
         ByteBuffer buffer = ByteBuffer.allocate(3);
         buffer.position(1);
-        lc = buffer.putShort((short) length).array();
+        lenBytes = buffer.putShort((short) length).array();
       }
-      return new byte[length];
+      return lenBytes;
     }
 
     private APDUBuilder clearLc() {
@@ -121,7 +120,7 @@ public final class APDU {
     }
 
     public APDUBuilder setLe(int leLength) {
-      checkArgument(leLength >= 1 && leLength <= 65536,
+      checkArgument(leLength >= 1 && leLength <= 65535,
           "Le is between 1..65535");
       le = lengthOfData(leLength);
       return this;

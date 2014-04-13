@@ -20,6 +20,13 @@
  */
 package com.github.wnameless.smartcard;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+
+import javax.smartcardio.CommandAPDU;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,20 +35,22 @@ import com.google.common.testing.NullPointerTester;
 public class AutomatedReaderTest {
 
   AutomatedReader reader;
+  CommandAPDU[] commands;
 
   @Before
   public void setUp() throws Exception {
-    reader =
-        new AutomatedReader(APDU
-            .builder()
-            .setINS(INS.SELECT_FILE)
-            .setP1((byte) 0x04)
-            .setData((byte) 0xD1, (byte) 0x58, (byte) 0x00, (byte) 0x00,
-                (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00).build(),
+    commands =
+        new CommandAPDU[] {
+            APDU.builder()
+                .setINS(INS.SELECT_FILE)
+                .setP1((byte) 0x04)
+                .setData((byte) 0xD1, (byte) 0x58, (byte) 0x00, (byte) 0x00,
+                    (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                    (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                    (byte) 0x00, (byte) 0x00, (byte) 0x11, (byte) 0x00).build(),
             APDU.builder().setINS(INS.GET_DATA).setP1((byte) 0x11)
-                .setData((byte) 0x00, (byte) 0x00).build());
+                .setData((byte) 0x00, (byte) 0x00).build() };
+    reader = new AutomatedReader(commands);
   }
 
   @Test
@@ -50,6 +59,25 @@ public class AutomatedReaderTest {
     tester.testAllPublicConstructors(AutomatedReader.class);
     tester.testAllPublicInstanceMethods(reader);
     tester.testAllPublicStaticMethods(AutomatedReader.class);
+  }
+
+  @Test
+  public void testConstructors() {
+    assertTrue(new AutomatedReader(commands) instanceof AutomatedReader);
+    assertTrue(new AutomatedReader(Arrays.asList(commands)) instanceof AutomatedReader);
+  }
+
+  @Test
+  public void testStop() {
+    reader.stop();
+  }
+
+  @Test
+  public void testToString() {
+    assertEquals(
+        "AutomatedReader{["
+            + "CommmandAPDU: 21 bytes, nc=16, ne=0, CommmandAPDU: 7 bytes, nc=2, ne=0]}",
+        reader.toString());
   }
 
 }

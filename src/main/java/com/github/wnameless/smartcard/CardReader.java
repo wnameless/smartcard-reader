@@ -55,6 +55,7 @@ public final class CardReader {
   private static final Logger logger = Logger.getLogger(CardReader.class
       .getName());
 
+  private static final TerminalFactory factory = TerminalFactory.getDefault();
   private static final CardReader INSTANCE = new CardReader();
 
   private CardReader() {}
@@ -98,20 +99,30 @@ public final class CardReader {
     return responses;
   }
 
+  /**
+   * Returns a List of ResponseAPDU of executed command on specified card
+   * terminal.
+   * 
+   * @param terminal
+   *          a CardTerminal
+   * @param commands
+   *          an Array of CommandAPDU
+   * @return a List of ResponseAPDU
+   */
   public List<ResponseAPDU> readOnTerminal(CardTerminal terminal,
       CommandAPDU... commands) {
     return readOnTerminal(terminal, Arrays.asList(commands));
   }
 
   /**
-   * Returns a {@link CardResponse} of executed command on specified card
+   * Returns a List of ResponseAPDU of executed command on specified card
    * terminal.
    * 
    * @param terminal
    *          a CardTerminal
    * @param commands
    *          a List of CommandAPDU
-   * @return a List of {@link CardResponse}
+   * @return a List of ResponseAPDU
    */
   public List<ResponseAPDU> readOnTerminal(CardTerminal terminal,
       List<CommandAPDU> commands) {
@@ -141,7 +152,6 @@ public final class CardReader {
    * @return a List of CardTerminal
    */
   public List<CardTerminal> getCardTerminals() {
-    TerminalFactory factory = TerminalFactory.getDefault();
     List<CardTerminal> terminals = emptyList();
     try {
       terminals = factory.terminals().list();

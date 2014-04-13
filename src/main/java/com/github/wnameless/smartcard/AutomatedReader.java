@@ -49,17 +49,21 @@ public final class AutomatedReader {
   private final List<CommandAPDU> commands;
   private Timer timer;
 
+  /**
+   * Returns an {@link AutomatedReader}.
+   * 
+   * @param commands
+   *          an Array of CommandAPDU
+   */
   public AutomatedReader(CommandAPDU... commands) {
     this.commands = newArrayList(commands);
   }
 
   /**
-   * Creates an {@link AutomatedReader}.
+   * Returns an {@link AutomatedReader}.
    * 
-   * @param command
+   * @param commands
    *          a List of CommandAPDU
-   * @param task
-   *          a {@link CardTask}
    */
   public AutomatedReader(List<CommandAPDU> commands) {
     this.commands = newArrayList(commands);
@@ -70,6 +74,8 @@ public final class AutomatedReader {
    * 
    * @param time
    *          in milliseconds
+   * @param task
+   *          a {@link CardTask}
    */
   public synchronized void reading(int time, final CardTask task) {
     final Set<ResponseAPDU> lastResponses = newHashSet();
@@ -97,7 +103,8 @@ public final class AutomatedReader {
    * Stops the reading of smart cards.
    */
   public synchronized void stop() {
-    timer.stop();
+    if (timer != null)
+      timer.stop();
   }
 
   @Override
