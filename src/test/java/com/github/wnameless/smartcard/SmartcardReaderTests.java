@@ -27,4 +27,4 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ APDUTest.class, AutomatedReaderTest.class,
     CardReaderTest.class, INSTest.class })
-public class AllTests {}
+public class SmartcardReaderTests {}
