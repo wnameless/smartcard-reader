@@ -24,13 +24,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static net.sf.rubycollect4j.RubyCollections.qr;
 import static net.sf.rubycollect4j.RubyCollections.rs;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 import javax.smartcardio.CommandAPDU;
 
+import net.sf.rubycollect4j.RubyArray;
 import net.sf.rubycollect4j.RubyString;
+import net.sf.rubycollect4j.block.TransformBlock;
 
 import com.github.wnameless.nullproof.annotation.RejectNull;
 import com.google.common.primitives.Bytes;
@@ -169,22 +169,20 @@ public final class APDU {
       if (hexStr == null) {
         lc = null;
         data = null;
-      } else {
-        int suffixZero = hexStr.size() % 2;
-        if (suffixZero != 0)
-          hexStr.concat("0");
-        data = new BigInteger(hexStr.toS(), 16).toByteArray();
-        if (data.length < hexStr.length() / 2) {
-          int prefixBytesNum = hexStr.length() / 2 - data.length;
-          byte[] prefixBytes = new byte[prefixBytesNum];
-          data = Bytes.concat(prefixBytes, data);
-        } else if (data.length > hexStr.length() / 2) {
-          data =
-              Arrays.copyOfRange(data, data.length - hexStr.length() / 2,
-                  data.length);
-        }
-        setLc(data.length);
+        return this;
       }
+
+      data =
+          Bytes.toArray(rs(hexString).toA().eachSlice(2)
+              .map(new TransformBlock<RubyArray<String>, Byte>() {
+
+                @Override
+                public Byte yield(RubyArray<String> item) {
+                  return (byte) (rs(item.join()).ljust(2, "0").toI(16) & 0xFF);
+                }
+
+              }));
+      setLc(data.length);
       return this;
     }
 
