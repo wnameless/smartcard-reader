@@ -173,7 +173,7 @@ public final class APDU {
       }
 
       data =
-          Bytes.toArray(rs(hexString).toA().eachSlice(2)
+          Bytes.toArray(rs(hexString).eachSlice(2)
               .map(new TransformBlock<RubyArray<String>, Byte>() {
 
                 @Override
