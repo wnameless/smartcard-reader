@@ -21,16 +21,16 @@
 package com.github.wnameless.smartcard;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static net.sf.rubycollect4j.RubyCollections.qr;
+import static net.sf.rubycollect4j.RubyCollections.ra;
 import static net.sf.rubycollect4j.RubyCollections.rs;
 
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import javax.smartcardio.CommandAPDU;
 
 import net.sf.rubycollect4j.RubyArray;
-import net.sf.rubycollect4j.RubyString;
-import net.sf.rubycollect4j.block.TransformBlock;
+import net.sf.rubycollect4j.util.ByteUtil;
 
 import com.github.wnameless.nullproof.annotation.RejectNull;
 import com.google.common.primitives.Bytes;
@@ -164,25 +164,16 @@ public final class APDU {
      *          a hex string
      * @return this {@link APDUBuilder}
      */
+    @SuppressWarnings("unchecked")
     public APDUBuilder setData(String hexString) {
-      RubyString hexStr = rs(hexString).slice(qr("^[0-9A-Fa-f]+"));
-      if (hexStr == null) {
+      RubyArray<?> bytes = rs(ra(hexString).pack("H*")).unpack("c*");
+      if (bytes.anyʔ()) {
+        data = ByteUtil.toArray((List<Byte>) bytes);
+        setLc(data.length);
+      } else {
         lc = null;
         data = null;
-        return this;
       }
-
-      data =
-          Bytes.toArray(rs(hexString).eachSlice(2).map(
-              new TransformBlock<RubyArray<String>, Byte>() {
-
-                @Override
-                public Byte yield(RubyArray<String> item) {
-                  return (byte) (rs(item.join()).ljust(2, "0").toI(16) & 0xFF);
-                }
-
-              }));
-      setLc(data.length);
       return this;
     }
 
