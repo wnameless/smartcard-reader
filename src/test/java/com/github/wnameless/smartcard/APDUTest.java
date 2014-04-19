@@ -26,6 +26,7 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.nio.ByteBuffer;
 
 import javax.smartcardio.CommandAPDU;
 
@@ -106,6 +107,15 @@ public class APDUTest {
     assertEquals(new CommandAPDU(new byte[] { (byte) 0x00, (byte) 0x00,
         (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x11 }),
         builder.setData((byte) 0x11).build());
+    assertEquals(
+        new CommandAPDU(Bytes.concat(new byte[] { (byte) 0x00, (byte) 0x00,
+            (byte) 0x00, (byte) 0x00, (byte) 0xFF }, new byte[255])), builder
+            .setData(new byte[255]).build());
+    assertEquals(
+        new CommandAPDU(Bytes.concat(new byte[] { (byte) 0x00, (byte) 0x00,
+            (byte) 0x00, (byte) 0x00, (byte) 0x00 }, ByteBuffer.allocate(2)
+            .putShort((short) 256).array(), new byte[256])),
+        builder.setData(new byte[256]).build());
   }
 
   @Test

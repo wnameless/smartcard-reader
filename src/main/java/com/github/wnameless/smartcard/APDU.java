@@ -124,7 +124,7 @@ public final class APDU {
 
     private byte[] lengthOfData(int length) {
       byte[] lenBytes;
-      if (length < 255) {
+      if (length < 256) {
         lenBytes = new byte[] { (byte) length };
       } else {
         ByteBuffer buffer = ByteBuffer.allocate(3);
@@ -173,8 +173,8 @@ public final class APDU {
       }
 
       data =
-          Bytes.toArray(rs(hexString).eachSlice(2)
-              .map(new TransformBlock<RubyArray<String>, Byte>() {
+          Bytes.toArray(rs(hexString).eachSlice(2).map(
+              new TransformBlock<RubyArray<String>, Byte>() {
 
                 @Override
                 public Byte yield(RubyArray<String> item) {
