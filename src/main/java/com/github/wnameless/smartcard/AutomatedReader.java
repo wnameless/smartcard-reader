@@ -53,7 +53,7 @@ public final class AutomatedReader {
    * Returns an {@link AutomatedReader}.
    * 
    * @param commands
-   *          an Array of CommandAPDU
+   *          an array of CommandAPDU
    */
   public AutomatedReader(CommandAPDU... commands) {
     this.commands = newArrayList(commands);

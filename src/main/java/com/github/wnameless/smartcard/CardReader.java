@@ -44,9 +44,9 @@ import com.google.common.collect.ListMultimap;
  * 
  * {@link CardReader} is a friendly wrapper to Java Smartcard API. It can
  * execute a set of CommandAPDU to all or specified card readers and return the
- * responses back.<br>
- * <br>
- * It's a singeton.
+ * responses back.
+ * <P>
+ * It's a singleton.
  * 
  */
 @RejectNull
@@ -63,7 +63,7 @@ public final class CardReader {
   /**
    * Returns the instance of {@link CardReader}.
    * 
-   * @return a {@link CardReader}
+   * @return {@link CardReader}
    */
   public static CardReader getInstance() {
     return INSTANCE;
@@ -74,8 +74,8 @@ public final class CardReader {
    * of CommandAPDU on all Smartcard readers.
    * 
    * @param commands
-   *          an Array of CommandAPDU
-   * @return a ListMultimap&lt;CardTerminal, ResponseAPDU&gt
+   *          an array of CommandAPDU
+   * @return ListMultimap&lt;CardTerminal, ResponseAPDU&gt
    */
   public ListMultimap<CardTerminal, ResponseAPDU> read(CommandAPDU... commands) {
     return read(Arrays.asList(commands));
@@ -87,7 +87,7 @@ public final class CardReader {
    * 
    * @param commands
    *          a List of CommandAPDU
-   * @return a ListMultimap&lt;CardTerminal, ResponseAPDU&gt;
+   * @return ListMultimap&lt;CardTerminal, ResponseAPDU&gt;
    */
   public ListMultimap<CardTerminal, ResponseAPDU> read(
       List<CommandAPDU> commands) {
@@ -106,8 +106,8 @@ public final class CardReader {
    * @param terminal
    *          a CardTerminal
    * @param commands
-   *          an Array of CommandAPDU
-   * @return a List of ResponseAPDU
+   *          an array of CommandAPDU
+   * @return List of ResponseAPDU
    */
   public List<ResponseAPDU> readOnTerminal(CardTerminal terminal,
       CommandAPDU... commands) {
@@ -122,7 +122,7 @@ public final class CardReader {
    *          a CardTerminal
    * @param commands
    *          a List of CommandAPDU
-   * @return a List of ResponseAPDU
+   * @return List of ResponseAPDU
    */
   public List<ResponseAPDU> readOnTerminal(CardTerminal terminal,
       List<CommandAPDU> commands) {
@@ -149,7 +149,7 @@ public final class CardReader {
   /**
    * Returns all card terminals of the system.
    * 
-   * @return a List of CardTerminal
+   * @return List of CardTerminal
    */
   public List<CardTerminal> getCardTerminals() {
     List<CardTerminal> terminals = emptyList();

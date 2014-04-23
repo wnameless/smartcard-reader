@@ -21,15 +21,11 @@
 package com.github.wnameless.smartcard;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static net.sf.rubycollect4j.RubyCollections.ra;
-import static net.sf.rubycollect4j.RubyCollections.rs;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 
 import javax.smartcardio.CommandAPDU;
 
-import net.sf.rubycollect4j.RubyArray;
 import net.sf.rubycollect4j.util.ByteUtil;
 
 import com.github.wnameless.nullproof.annotation.RejectNull;
@@ -49,7 +45,7 @@ public final class APDU {
   /**
    * Returns a builder of CommandAPDU.
    * 
-   * @return a {@link APDUBuilder}
+   * @return {@link APDUBuilder}
    */
   public static APDUBuilder builder() {
     return new APDUBuilder();
@@ -163,16 +159,17 @@ public final class APDU {
      * @param hexString
      *          a hex string
      * @return this {@link APDUBuilder}
+     * @throws IllegalArgumentException
+     *           if hexadecimal string is invalid
      */
-    @SuppressWarnings("unchecked")
     public APDUBuilder setData(String hexString) {
-      RubyArray<?> bytes = rs(ra(hexString).pack("H*")).unpack("c*");
-      if (bytes.anyʔ()) {
-        data = ByteUtil.toArray((List<Byte>) bytes);
-        setLc(data.length);
-      } else {
+      byte[] bytes = ByteUtil.fromHexString(hexString);
+      if (bytes.length == 0) {
         lc = null;
         data = null;
+      } else {
+        data = bytes;
+        setLc(data.length);
       }
       return this;
     }
@@ -215,7 +212,7 @@ public final class APDU {
     /**
      * Returns a CommandAPDU by user given data.
      * 
-     * @return a CommandAPDU
+     * @return CommandAPDU
      */
     public CommandAPDU build() {
       byte[] finalApdu = apdu;

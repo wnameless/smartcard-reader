@@ -153,10 +153,9 @@ public class APDUTest {
         builder.setData("1").build());
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testSetDataWithInvalidHexString() {
-    assertEquals(new CommandAPDU(new byte[] { (byte) 0x00, (byte) 0x00,
-        (byte) 0x00, (byte) 0x00 }), builder.setData("qerb11").build());
+    builder.setData("qerb11").build();
   }
 
   @Test
