@@ -10,7 +10,7 @@ Intend to make the creation of CommandAPDU easier and get the ResponseAPDUs from
 <dependency>
     <groupId>com.github.wnameless</groupId>
     <artifactId>smartcard-reader</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
