@@ -141,7 +141,6 @@ public final class CardReader {
       }
     } catch (CardException e) {
       logger.log(Level.SEVERE, null, e.getMessage());
-      throw new RuntimeException(e);
     }
     return responses;
   }
