@@ -21,7 +21,9 @@ package com.github.wnameless.smartcard;
 import static java.util.Collections.emptyList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.Card;
@@ -31,8 +33,6 @@ import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.smartcardio.TerminalFactory;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
 
 /**
  * 
@@ -67,7 +67,7 @@ public final class CardReader {
    * @param commands an array of CommandAPDU
    * @return ListMultimap&lt;CardTerminal, ResponseAPDU&gt
    */
-  public ListMultimap<CardTerminal, ResponseAPDU> read(CommandAPDU... commands) {
+  public Map<CardTerminal, List<ResponseAPDU>> read(CommandAPDU... commands) {
     return read(Arrays.asList(commands));
   }
 
@@ -78,10 +78,10 @@ public final class CardReader {
    * @param commands a List of CommandAPDU
    * @return ListMultimap&lt;CardTerminal, ResponseAPDU&gt;
    */
-  public ListMultimap<CardTerminal, ResponseAPDU> read(List<CommandAPDU> commands) {
-    ListMultimap<CardTerminal, ResponseAPDU> responses = ArrayListMultimap.create();
+  public Map<CardTerminal, List<ResponseAPDU>> read(List<CommandAPDU> commands) {
+    Map<CardTerminal, List<ResponseAPDU>> responses = new LinkedHashMap<>();
     for (CardTerminal terminal : getCardTerminals()) {
-      responses.putAll(terminal, getResponse(terminal, commands));
+      responses.put(terminal, getResponse(terminal, commands));
     }
     return responses;
   }

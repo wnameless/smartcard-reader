@@ -18,10 +18,8 @@
  */
 package com.github.wnameless.smartcard;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import java.nio.ByteBuffer;
 import javax.smartcardio.CommandAPDU;
-import com.google.common.primitives.Bytes;
 import net.sf.rubycollect4j.util.ByteUtils;
 
 /**
@@ -129,8 +127,10 @@ public final class APDU {
      * @return this {@link APDUBuilder}
      */
     public APDUBuilder setData(byte... dataBytes) {
-      checkArgument(dataBytes.length >= 1 && dataBytes.length <= 65535,
-          "Data length is between 1..65535");
+      if (dataBytes.length < 1 || dataBytes.length > 65535) {
+        throw new IllegalArgumentException("Data length must be between 1..65535");
+      }
+
       setLc(dataBytes.length);
       data = dataBytes;
       return this;
@@ -174,7 +174,10 @@ public final class APDU {
      * @return this {@link APDUBuilder}
      */
     public APDUBuilder setLe(int leLength) {
-      checkArgument(leLength >= 1 && leLength <= 65535, "Le is between 1..65535");
+      if (leLength < 1 || leLength > 65535) {
+        throw new IllegalArgumentException("Le must be between 1..65535");
+      }
+
       le = lengthOfData(leLength);
       return this;
     }
@@ -196,9 +199,30 @@ public final class APDU {
      */
     public CommandAPDU build() {
       byte[] finalApdu = apdu;
-      if (lc != null) finalApdu = Bytes.concat(apdu, lc, data);
-      if (le != null) finalApdu = Bytes.concat(finalApdu, le);
+      if (lc != null) finalApdu = concatenateByteArrays(apdu, lc, data);
+      if (le != null) finalApdu = concatenateByteArrays(finalApdu, le);
       return new CommandAPDU(finalApdu);
+    }
+
+    private byte[] concatenateByteArrays(byte[]... byteArrays) {
+      int totalLength = 0;
+      for (byte[] array : byteArrays) {
+        if (array != null) {
+          totalLength += array.length;
+        }
+      }
+
+      byte[] combined = new byte[totalLength];
+
+      int currentPosition = 0;
+      for (byte[] array : byteArrays) {
+        if (array != null) {
+          System.arraycopy(array, 0, combined, currentPosition, array.length);
+          currentPosition += array.length;
+        }
+      }
+
+      return combined;
     }
 
   }

@@ -55,11 +55,6 @@
       <artifactId>rubycollect4j</artifactId>
       <version>3.0.0</version>
     </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>33.4.0-jre</version>
-    </dependency>
 
     <dependency>
       <groupId>org.mockito</groupId>

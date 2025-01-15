@@ -163,13 +163,13 @@ public class APDUTest {
       builder.setData(new byte[0]);
       fail();
     } catch (IllegalArgumentException e) {
-      assertEquals("Data length is between 1..65535", e.getMessage());
+      assertEquals("Data length must be between 1..65535", e.getMessage());
     }
     try {
       builder.setData(new byte[65536]);
       fail();
     } catch (IllegalArgumentException e) {
-      assertEquals("Data length is between 1..65535", e.getMessage());
+      assertEquals("Data length must be between 1..65535", e.getMessage());
     }
   }
 
@@ -201,13 +201,13 @@ public class APDUTest {
       builder.setLe(0);
       fail();
     } catch (IllegalArgumentException e) {
-      assertEquals("Le is between 1..65535", e.getMessage());
+      assertEquals("Le must be between 1..65535", e.getMessage());
     }
     try {
       builder.setLe(65536);
       fail();
     } catch (IllegalArgumentException e) {
-      assertEquals("Le is between 1..65535", e.getMessage());
+      assertEquals("Le must be between 1..65535", e.getMessage());
     }
   }
 

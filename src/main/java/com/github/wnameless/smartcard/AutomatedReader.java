@@ -18,17 +18,17 @@
  */
 package com.github.wnameless.smartcard;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 import javax.swing.Timer;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ListMultimap;
 
 /**
  * 
@@ -47,7 +47,7 @@ public final class AutomatedReader {
    */
   public AutomatedReader(CommandAPDU... commands) {
     Objects.requireNonNull(commands);
-    this.commands = newArrayList(commands);
+    this.commands = new ArrayList<>(Arrays.asList(commands));
   }
 
   /**
@@ -57,7 +57,7 @@ public final class AutomatedReader {
    */
   public AutomatedReader(List<CommandAPDU> commands) {
     Objects.requireNonNull(commands);
-    this.commands = newArrayList(commands);
+    this.commands = new ArrayList<>(commands);
   }
 
   /**
@@ -73,13 +73,15 @@ public final class AutomatedReader {
   public synchronized void reading(int time, final CardTask task) {
     Objects.requireNonNull(task);
     stop();
-    final Set<ResponseAPDU> lastResponses = newHashSet();
+    final Set<ResponseAPDU> lastResponses = new LinkedHashSet<>();
     timer = new Timer(time, (event) -> {
-      ListMultimap<CardTerminal, ResponseAPDU> responses = CardReader.getInstance().read(commands);
-      if (lastResponses.addAll(responses.values()) && !lastResponses.isEmpty()) {
+      Map<CardTerminal, List<ResponseAPDU>> responses = CardReader.getInstance().read(commands);
+      List<ResponseAPDU> allResponseAPDUs =
+          responses.values().stream().flatMap(r -> r.stream()).toList();
+      if (lastResponses.addAll(allResponseAPDUs) && !lastResponses.isEmpty()) {
         lastResponses.clear();
-        lastResponses.addAll(responses.values());
-        for (CardTerminal terminal : responses.keys()) {
+        lastResponses.addAll(allResponseAPDUs);
+        for (CardTerminal terminal : responses.keySet()) {
           task.execute(terminal, responses.get(terminal));
         }
       }
@@ -110,7 +112,7 @@ public final class AutomatedReader {
 
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(getClass()).addValue(commands).toString();
+    return getClass().getSimpleName() + "{" + commands + "}";
   }
 
 }
