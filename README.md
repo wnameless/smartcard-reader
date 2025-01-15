@@ -1,3 +1,5 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless/smartcard-reader/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.wnameless/smartcard-reader)
+
 smartcard-reader
 =============
 A smartcard reader util for Java.
@@ -10,7 +12,8 @@ Intend to make the creation of CommandAPDU easier and get the ResponseAPDUs from
 <dependency>
     <groupId>com.github.wnameless</groupId>
     <artifactId>smartcard-reader</artifactId>
-    <version>1.1.1</version>
+    <version>${newestVersion}</version>
+	  <!-- Newest version shows in the maven-central badge above -->
 </dependency>
 ```
 
