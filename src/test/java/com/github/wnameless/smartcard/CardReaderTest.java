@@ -25,8 +25,8 @@ import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.CommandAPDU;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -44,9 +44,9 @@ public class CardReaderTest {
   @Mock
   CardChannel channel;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     when(terminal.connect(any(String.class))).thenReturn(card);
     when(card.getBasicChannel()).thenReturn(channel);
 
@@ -69,7 +69,7 @@ public class CardReaderTest {
   @Test
   public void testReadOnTermial() throws Exception {
     assertEquals(commands.length, reader.readOnTerminal(terminal, commands).size());
-    verify(terminal.connect(any(String.class)), times(1));
+    verify(terminal, times(1)).connect(any(String.class));
   }
 
   @Test
