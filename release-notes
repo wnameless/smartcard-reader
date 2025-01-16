@@ -11,3 +11,4 @@ Version 1.1.1
 
 Version 2.0.0
 * Set minimal Java version to 11
++ Support Java modularity

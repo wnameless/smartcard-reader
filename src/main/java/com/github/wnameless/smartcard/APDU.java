@@ -18,8 +18,11 @@
  */
 package com.github.wnameless.smartcard;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import javax.smartcardio.CommandAPDU;
+import net.sf.rubycollect4j.Ruby;
 import net.sf.rubycollect4j.util.ByteUtils;
 
 /**
@@ -199,30 +202,29 @@ public final class APDU {
      */
     public CommandAPDU build() {
       byte[] finalApdu = apdu;
-      if (lc != null) finalApdu = concatenateByteArrays(apdu, lc, data);
-      if (le != null) finalApdu = concatenateByteArrays(finalApdu, le);
+      if (lc != null) {
+        finalApdu =
+            Ruby.Array.of(apdu, lc, data).reduce(new ByteArrayOutputStream(), (os, bytes) -> {
+              try {
+                os.write(bytes);
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+              return os;
+            }).toByteArray();
+      }
+      if (le != null) {
+        finalApdu =
+            Ruby.Array.of(finalApdu, le).reduce(new ByteArrayOutputStream(), (os, bytes) -> {
+              try {
+                os.write(bytes);
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+              return os;
+            }).toByteArray();
+      }
       return new CommandAPDU(finalApdu);
-    }
-
-    private byte[] concatenateByteArrays(byte[]... byteArrays) {
-      int totalLength = 0;
-      for (byte[] array : byteArrays) {
-        if (array != null) {
-          totalLength += array.length;
-        }
-      }
-
-      byte[] combined = new byte[totalLength];
-
-      int currentPosition = 0;
-      for (byte[] array : byteArrays) {
-        if (array != null) {
-          System.arraycopy(array, 0, combined, currentPosition, array.length);
-          currentPosition += array.length;
-        }
-      }
-
-      return combined;
     }
 
   }

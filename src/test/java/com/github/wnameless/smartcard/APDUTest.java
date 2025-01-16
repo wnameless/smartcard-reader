@@ -19,6 +19,8 @@
 package com.github.wnameless.smartcard;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
@@ -28,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import com.github.wnameless.smartcard.APDU.APDUBuilder;
 import com.google.common.primitives.Bytes;
 import com.google.common.testing.NullPointerTester;
+import net.sf.rubycollect4j.Ruby;
 
 public class APDUTest {
 
@@ -209,6 +212,44 @@ public class APDUTest {
     } catch (IllegalArgumentException e) {
       assertEquals("Le must be between 1..65535", e.getMessage());
     }
+  }
+
+  @Test
+  public void testArrayCopy() {
+    byte[] apdu = new byte[] {(byte) 0x00, (byte) 0x02, (byte) 0x00};
+    byte[] lc = new byte[] {(byte) 0x00, (byte) 0x02, (byte) 0x00};
+    byte[] data = new byte[] {(byte) 0x00, (byte) 0x02, (byte) 0x00};
+
+    assertArrayEquals(concatenateByteArrays(apdu, lc, data),
+        Ruby.Array.of(apdu, lc, data).reduce(new ByteArrayOutputStream(), (os, bytes) -> {
+          try {
+            os.write(bytes);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+          return os;
+        }).toByteArray());
+  }
+
+  private byte[] concatenateByteArrays(byte[]... byteArrays) {
+    int totalLength = 0;
+    for (byte[] array : byteArrays) {
+      if (array != null) {
+        totalLength += array.length;
+      }
+    }
+
+    byte[] combined = new byte[totalLength];
+
+    int currentPosition = 0;
+    for (byte[] array : byteArrays) {
+      if (array != null) {
+        System.arraycopy(array, 0, combined, currentPosition, array.length);
+        currentPosition += array.length;
+      }
+    }
+
+    return combined;
   }
 
 }
