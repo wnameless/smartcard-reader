@@ -65,7 +65,7 @@ public final class CardReader {
    * all Smartcard readers.
    * 
    * @param commands an array of CommandAPDU
-   * @return ListMultimap&lt;CardTerminal, ResponseAPDU&gt
+   * @return ListMultimap&lt;CardTerminal, ResponseAPDU&gt;
    */
   public Map<CardTerminal, List<ResponseAPDU>> read(CommandAPDU... commands) {
     return read(Arrays.asList(commands));

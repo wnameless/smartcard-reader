@@ -56,6 +56,11 @@ public final class APDU {
     private byte[] le = null;
 
     /**
+     * Default constructor.
+     */
+    public APDUBuilder() {}
+
+    /**
      * Sets the CLA byte, default is 0x00.
      * 
      * @param claByte a CLA byte
